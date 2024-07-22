@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SuppActivity"
+    android:background="#101f37">
+
+    <Button
+        android:id="@+id/btnbk"
+        android:layout_width="62dp"
+        android:layout_height="57dp"
+        android:background="#101f37"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="SUPPORT"
+        android:textColor="#E9B0D6"
+        android:textSize="75dp"
+        android:layout_marginTop="50dp"
+        android:textAlignment="center"></TextView>
+
+    <Button
+        android:id="@+id/btnCall"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:text="Contact"
+        android:textSize="30dp"
+        android:textColor="#101f37"
+        android:background="@drawable/oval"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404" />
+
+    <Button
+        android:id="@+id/btnEmail"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:background="@drawable/oval"
+        android:text="Email"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="175dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.473" />
+</android.support.constraint.ConstraintLayout>

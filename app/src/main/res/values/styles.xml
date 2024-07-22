@@ -1,0 +1,38 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:animateOnClick">true</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.Dark">
+        <item name="android:itemBackground">#3D3D3D</item>
+        <item name="android:itemTextAppearance">@style/MyActionBar</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="MyActionBar" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">#CCCCCC</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="DrawerArrowStyle">
+        <item name="spinBars">true</item>
+        <item name="android:color">@android:color/holo_red_light</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+
+</resources>

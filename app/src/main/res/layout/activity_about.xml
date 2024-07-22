@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutActivity"
+    android:background="#101f37">
+
+    <ImageButton
+        android:id="@+id/btnbk"
+        android:layout_width="62dp"
+        android:layout_height="57dp"
+        android:background="@drawable/mainlogo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <TextView
+        android:id="@+id/com"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        android:text="You need to send message in the format as shown below :- "
+        android:textColor="@color/c1"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/desc"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="18dp"
+        android:text="This app is used to find the location of your phone with the help of networ.By using some basic commands you can find your phone by vibrating ,playing loud sound etc..."
+        android:textColor="@color/c1"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/loc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.654" />
+
+    <TextView
+        android:id="@+id/loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="292dp"
+        android:text="To find the location of your phone "
+        android:textColor="@color/c2"
+        app:layout_constraintBottom_toBottomOf="@+id/textView19"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.845" />
+
+    <TextView
+        android:id="@+id/loc"
+        android:layout_width="291dp"
+        android:layout_height="31dp"
+        android:text="COMMAND: username LOCATION"
+        android:textColor="@color/c1"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.391" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="221dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
+        android:text="To find the vibrate of your phone "
+        android:textColor="@color/c1"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="323dp" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="291dp"
+        android:layout_height="31dp"
+        android:text="COMMAND: username VIBRATE"
+        android:textColor="@color/c1"
+        android:textSize="18dp"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="385dp" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="269dp"
+        android:layout_height="31dp"
+        android:text="To get the perticular contact fro your phone "
+        android:textColor="@color/c1"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="423dp" />
+
+    <TextView
+        android:layout_width="377dp"
+        android:layout_height="46dp"
+        android:text="COMMAND: username getcontact saved_contact_name(without case difference)"
+        android:textColor="@color/c1"
+        android:textSize="18dp"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="464dp" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="269dp"
+        android:layout_height="31dp"
+        android:text="To your phone by playing sound "
+        android:textColor="@color/c1"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="560dp" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="291dp"
+        android:layout_height="31dp"
+        android:text="COMMAND: username SOUND"
+        android:textColor="@color/c1"
+        android:textSize="18dp"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="560dp" />
+
+
+</android.support.constraint.ConstraintLayout>

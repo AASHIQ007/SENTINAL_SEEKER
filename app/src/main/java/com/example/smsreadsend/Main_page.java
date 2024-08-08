@@ -1,13 +1,8 @@
 package com.example.smsreadsend;
 
 import android.Manifest;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.os.Build;
-import android.provider.Settings;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.admin.DevicePolicyManager;
@@ -65,18 +60,10 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.os.Looper;
-//import androidx.annotation.Nullable;
 
 import static com.example.smsreadsend.App.CHANNEL_1_ID;
 import static com.example.smsreadsend.App.CHANNEL_2_ID;
 import static com.example.smsreadsend.App.CHANNEL_3_ID;
-
-// location gain
-
 
 public class Main_page extends AppCompatActivity implements LocationListener,NavigationView.OnNavigationItemSelectedListener  {
     public static String password,username,phonenumber;
@@ -106,7 +93,6 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
     public static Main_page Instance() {
         return instance;
     }
-    private boolean isLocationServiceRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,11 +197,6 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
                 refreshInbox();
             }
         },0,5000);
-
-        if (!isLocationServiceRunning) {
-            startService(new Intent(this, LocationService.class));
-            isLocationServiceRunning = true;
-        }
     }
 
     @Override
@@ -247,8 +228,14 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
             smsMan.sendTextMessage(phoneNum, null ,msg , null, null);
             Toast.makeText(Main_page.this, "SMS Sent to " + phoneNum, Toast.LENGTH_LONG).show();
         }
-    }
 
+        if (etPhoneNum == null||msg.isEmpty() || phoneNum.isEmpty() || etMessage == null ) {
+            throw new IllegalArgumentException("Invalid phone number or message body");
+        }
+
+//        SmsManager smsManager = SmsManager.getDefault();
+//        smsManager.sendTextMessage(etPhoneNum.toString(), null, "hai", null, null);
+    }
 
     public String readContact(String cname){
 
@@ -276,6 +263,19 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
         return "Not Found";
     }
 
+    public static void enlocation(final Context context){
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean isLocationEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (!isLocationEnabled) {
+            Toast.makeText(context, "Location is turned off. Please enable it in settings.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, "Location is already turned on.", Toast.LENGTH_SHORT).show();
+        }
+    }
     public void refreshInbox(){
         ContentResolver cResolver = getContentResolver();
         Cursor smsInboxCursor = cResolver.query(Uri.parse("content://sms/inbox"),
@@ -294,6 +294,7 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
 
         if (rmsg.contains(username+" getcontact ")) {
             ps=1;
+
         }
         else if (rmsg.contains(username+" LOCATION")) {
             ps=2;
@@ -312,8 +313,6 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
         }
         else if (rmsg.contains(username+" SOUND")) {
             ps=7;
-        }else if(rmsg.contains(username +" STOP")){
-            ps=8;
         }
         switch (ps)
         {
@@ -341,10 +340,12 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
                     //                                          int[] grantResults)
                     // to handle the case where the user grants the permission. See the documentation
                     // for ActivityCompat#requestPermissions for more details.
-                    if (!isLocationServiceRunning) {
-                        startService(new Intent(this, LocationService.class));
-                        isLocationServiceRunning = true;
-                    }
+                    enlocation(this);
+                    Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+                    onLocationChanged(location);
+                    etPhoneNum.setText(rphno);
+                    sendSMS();
+                    notif2("Location","Location has succesfully been sent");
                 }
                 else {
                     Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
@@ -392,12 +393,6 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
                 break;
             case 7:
                 //Sound module
-                break;
-            case 8:
-                if (isLocationServiceRunning) {
-                    stopService(new Intent(this, LocationService.class));
-                    isLocationServiceRunning = false;
-                }
             default:
                 //No default;
         }
@@ -414,10 +409,69 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
     @Override
     public void onLocationChanged(Location location) {
 
-        double latitude=location.getLatitude();
-        double longitude=location.getLongitude();
-        etMessage.setText("Latitude:"+latitude+"\nLongitude:"+longitude);
+        if (location != null) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            etMessage.setText("Latitude: " + latitude + "\nLongitude: " + longitude);
+        } else {
+            // Handle case where location is null
+//            etMessage.setText("Unable to retrieve location. Please check your settings.");
+            // Optionally, prompt user to enable location settings
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
 
+//            try {
+//                Process process = Runtime.getRuntime().exec("su");
+//                DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+//                outputStream.writeBytes("settings put secure location_providers_allowed +gps\n");
+//                outputStream.writeBytes("settings put secure location_providers_allowed +network\n");
+//                outputStream.flush();
+//                outputStream.close();
+//                process.waitFor();
+//            } catch (IOException | InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        }
+
+    }
+
+    private void checkAndRequestLocationPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSION_SEND_SMS);
+        }
+    }
+
+    public void refreshLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            checkAndRequestLocationPermissions();
+            return;
+        }
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location != null) {
+            onLocationChanged(location);
+        } else {
+            // Handle case where location is not available
+            etMessage.setText("Location is not available.");
+            // Optionally, prompt user to enable location settings
+//            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            startActivity(intent);
+            try {
+                Process process = Runtime.getRuntime().exec("su");
+                DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+                outputStream.writeBytes("settings put secure location_providers_allowed +gps\n");
+                outputStream.writeBytes("settings put secure location_providers_allowed +network\n");
+                outputStream.flush();
+                outputStream.close();
+                process.waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -581,8 +635,5 @@ public class Main_page extends AppCompatActivity implements LocationListener,Nav
         Intent serviceIntent = new Intent(this,BackService.class);
         stopService(serviceIntent);
         onBackPressed();
-    }
-
-    public void updateLocation(double latitude, double longitude) {
     }
 }
